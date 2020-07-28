@@ -1,0 +1,94 @@
+import random
+
+
+def start_gui():
+    hangman_ascii_gui = """  _    _
+     | |  | |
+     | |__| | __ _ _ __   __ _ _ __ ___   __ _ _ __
+     |  __  |/ _` | '_ \\ / _` | '_ ` _ \\ / _` | '_ \\
+     | |  | | (_| | | | | (_| | | | | | | (_| | | | |
+     |_|  |_|\\__,_|_| |_|\\__, |_| |_| |_|\\__,_|_| |_|
+                          __/ |                      
+                         |___/        """
+    print(hangman_ascii_gui)
+    max_tries = random.randint(5, 10)
+    print(f"you can try {max_tries} times")
+    return max_tries
+
+
+def print_by_level(state):
+    # the function gets the number of levels left for the player, the func prints the hang man state
+    if state == 0:
+        print("""    x-------x
+    |       |
+    |       0
+    |      /|\\
+    |      / \\
+    |""")
+    elif state == 1:
+        print("""
+            x-------x
+    |       |
+    |       0
+    |      /|\\
+    |      /
+    |
+        """)
+    elif state == 2:
+        print("""
+      x-------x
+    |       |
+    |       0
+    |      /|\\
+    |
+    |
+        """)
+    elif state == 3:
+        print("""
+    x-------x
+    |       |
+    |       0
+    |       |
+    |
+    |
+        """)
+    elif state == 4:
+        print("""
+    x-------x
+    |       |
+    |       0
+    |
+    |
+    |
+        """)
+    elif state == 5:
+        print("""
+    x-------x
+    |       
+    |       
+    |
+    |
+    |
+        """)
+    elif state == 5:
+        print("x-------x")
+    return state
+
+
+def game(turns_left, answer):
+    guesses = ""
+    if turns_left <= 0:
+        print("you lose")
+        return
+    if guesses == answer:
+        print("you win")
+        return
+    guess = input("guess a letter")
+    if guess in answer:
+        guesses.join(guess)
+    else:
+        game(print_by_level(turns_left - 1), answer)
+
+
+if __name__ == '__main__':
+    game(print_by_level(start_gui()), "love")
