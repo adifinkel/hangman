@@ -2,18 +2,14 @@ import random
 
 
 def start_gui():
-    hangman_ascii_gui = """  _    _
+    print("""  _    _
      | |  | |
      | |__| | __ _ _ __   __ _ _ __ ___   __ _ _ __
      |  __  |/ _` | '_ \\ / _` | '_ ` _ \\ / _` | '_ \\
      | |  | | (_| | | | | (_| | | | | | | (_| | | | |
      |_|  |_|\\__,_|_| |_|\\__, |_| |_| |_|\\__,_|_| |_|
                           __/ |                      
-                         |___/        """
-    print(hangman_ascii_gui)
-    max_tries = random.randint(5, 10)
-    print(f"you can try {max_tries} times")
-    return max_tries
+                         |___/        \n\n""")
 
 
 def print_by_level(state):
@@ -70,25 +66,50 @@ def print_by_level(state):
     |
     |
         """)
-    elif state == 5:
-        print("x-------x")
-    return state
-
-
-def game(turns_left, answer):
-    guesses = ""
-    if turns_left <= 0:
-        print("you lose")
-        return
-    if guesses == answer:
-        print("you win")
-        return
-    guess = input("guess a letter")
-    if guess in answer:
-        guesses.join(guess)
     else:
-        game(print_by_level(turns_left - 1), answer)
+        print("x-------x")
+    if state > 0:
+        print(f"player 2, you can try {state} times")
+
+
+def has_win(guesses, answer):
+    return all(guesses.count(letter) for letter in answer)
+
+
+def turn(guesses, answer):
+    while not has_win(guesses, answer):
+        guess = input("guess a letter:\n")
+        if guesses.count(guess):
+            print("You already guessed that one!\n")
+
+        elif guess in answer:
+            guesses += guess
+            print("Nice one!")
+            print(' '.join([letter if (letter in guesses)
+                            else '_' for letter in answer]))
+
+        else:
+            guesses += guess
+            print("Maybe next time\n")
+            break
+
+    return guesses
+
+
+def game(answer):
+    guesses = ""
+    max_tries = random.randint(5, 10)
+    start_gui()
+    for i in range(max_tries)[::-1]:
+        print_by_level(i)
+        guesses = turn(guesses, answer)
+        if has_win(guesses, answer):
+            print("you win\n")
+            return
+
+    print_by_level(0)
+    print("you lose\n")
 
 
 if __name__ == '__main__':
-    game(print_by_level(start_gui()), "love")
+    game("love")
